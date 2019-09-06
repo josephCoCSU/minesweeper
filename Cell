@@ -1,0 +1,99 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Minesweeper
+{
+    class Cell
+    {
+        private Dictionary<Directions, Cell> zone; //mapping of zone surrounding cell
+        private Boolean hasMine;
+        public Boolean HasMine
+        {
+            get
+            {
+                return hasMine;
+            }
+            set
+            {
+                hasMine = value;
+            }
+        }
+        private Boolean isFlagged;
+        public Boolean IsFlagged
+        {
+            get
+            {
+                return isFlagged;
+            }
+            set
+            {
+                isFlagged = value;
+            }
+        }
+        private Boolean isOpen;
+        public Boolean IsOpen
+        {
+            get
+            {
+                return isOpen;
+            }
+            set
+            {
+                isOpen = value;
+            }
+        }
+        public void Open()
+        {
+            if (!IsOpen)
+            {
+                if (!IsFlagged)
+                { 
+                    IsOpen = true;
+                    //opens everything in reach
+                }
+
+            else
+                System.Console.WriteLine("Can't open.");
+            }
+
+        }
+        public void Flag()
+        {
+            if (!IsOpen)
+                IsFlagged = true;
+            else
+                IsFlagged = false;
+        }
+
+        public override String ToString()
+        {
+            String output = "";
+            if (HasMine)
+                output = "|M|";
+            if (IsFlagged)
+                output = "|F|";
+            if (!HasMine && !IsFlagged && !IsOpen)
+                output = "|_|";
+            if (!HasMine && !IsFlagged && IsOpen)
+                output = "| |";
+            if (HasMine && IsOpen)
+                output = "|X|";
+            //return "|" + (HasMine ? "B" : "_") + "|";
+            return output;
+
+        }
+
+        public Cell()
+        {
+            zone = new Dictionary<Directions, Cell>();
+            hasMine = false;
+            isFlagged = false;
+            isOpen = false;
+        }
+    }
+
+
+}

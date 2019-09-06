@@ -1,0 +1,118 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Minesweeper
+{
+    class Grid
+    {
+        private Cell[,] grid; //multidimensional array
+        private int numberOfMines;
+        private Boolean done = false;
+        public Grid()
+        {
+            grid = new Cell[5, 5];
+            numberOfMines = 5;
+            for (int row = 0; row < 5; row++)
+            {
+                for (int column = 0; column < 5; column++)
+                {
+                    grid[row, column] = new Cell();
+                }
+
+            }
+            int mines = numberOfMines;
+            while (mines > 0)
+            {
+                var rand = new Random();
+                int randomRow = rand.Next(5);
+                int randomColumn = rand.Next(5);
+                if (!grid[randomRow, randomColumn].HasMine)
+                {
+                    grid[randomRow, randomColumn].HasMine = true;
+                    mines--;
+                }
+            }
+        }
+
+        public Grid(int rows, int columns, int numberOfMines)
+        {
+            grid = new Cell[rows, columns];
+            for (int row = 0; row < rows; row++)
+            {
+                for (int column = 0; column < columns; column++)
+                {
+                    grid[row,column] = new Cell();
+                }
+
+            }
+
+            int mines = numberOfMines;
+            while (mines > 0)
+            {
+                var rand = new Random();
+                int randomRow = rand.Next(rows);
+                int randomColumn = rand.Next(columns);
+                if (!grid[randomRow, randomColumn].HasMine)
+                {
+                    grid[randomRow, randomColumn].HasMine = true;
+                    mines--;
+                }
+            }
+        }
+        public void Show() //shows the grid
+        {
+            for (int row = 0; row < grid.GetLength(0); row++)
+            {
+
+                for (int column = 0; column < grid.GetLength(1); column++)
+                {
+                    //Cell cellOutput = grid[row, column];
+                    System.Console.Write(grid[row, column].ToString());
+                }
+                System.Console.WriteLine();
+            }
+
+        }
+        public void Flag(int row, int column) //flag a cell
+        {
+            Cell temp = grid[row, column];
+            if (temp != null)
+            {
+                temp.Flag();
+                Show();
+            }
+            else
+            {
+                Show();
+                System.Console.WriteLine("Can't Flag. Out of bounds.");
+            }
+
+        }
+        public Boolean Open(int row, int column) //open a cell
+        {
+            Cell temp = grid[row, column];
+            if (temp != null)
+            {
+                temp.Open();
+                Show();
+                if (temp.HasMine && temp.IsOpen)
+                {
+                    done = true;
+                    System.Console.WriteLine("You opened a bomb. Game over.");
+                    return done;
+                }
+
+            }
+            else
+            {
+                Show();
+                System.Console.WriteLine("Can't Open. Out of bounds.");
+            }
+            return done;
+
+        }
+    }
+}
